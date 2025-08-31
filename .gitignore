@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+
+# Virtual environments
+venv/
+.env/
+.envrc
+
+# VS Code
+.vscode/
+
+# Poetry
+#poetry.lock
+
+# Data files
+data/
+*.csv
+*.xlsx
+*.db
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Secrets
+#*.env
