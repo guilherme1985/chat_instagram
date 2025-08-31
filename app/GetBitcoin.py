@@ -12,7 +12,7 @@ URL_BITCOIN = os.getenv("URL_BITCOIN")
 res = rq.get(URL_BITCOIN)
 bc_price = res.json()
 
-def get_bitcoin_price() -> pd.DataFrame:
+def get_bitcoin() -> pd.DataFrame:
 
     # Requisição para a API e conversao para json
     res = rq.get(URL_BITCOIN)
@@ -29,11 +29,10 @@ def get_bitcoin_price() -> pd.DataFrame:
         'preco': [preco],
         'cripto': [cripto],
         'moeda': [moeda],
-        'data_requisicao': [dt_rq]
+        'dt_req': [dt_rq]
     })
 
     return df
 
-# vlr_bitcoin = get_bitcoin_price()
-
+# vlr_bitcoin = get_bitcoin()
 # print(vlr_bitcoin)

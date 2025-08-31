@@ -20,26 +20,25 @@ def get_acoes() -> pd.DataFrame:
     dfs = []
 
     for a in top_10:
-        acao = yf.Ticker(a)
-        info = acao.info
+        ticket = yf.Ticker(a)
+        info = ticket.info
+        acao = info['symbol']
         preco = info['regularMarketPrice']
         nome = info['shortName']
         setor = info.get('sector', 'N/A')
         dt_rq = datetime.now().strftime("%Y-%m-%d %H:%M")
 
         df = pd.DataFrame({
-            'ticker': [acao],
+            'acao': [acao],
             'nome': [nome],
             'setor': [setor],
             'preco': [preco],
-            'data_requisicao': [dt_rq]
+            'dt_req': [dt_rq]
         })
-        
         dfs.append(df)
     
     resultado = pd.concat(dfs, ignore_index=True)
     return resultado
 
 # acoes = get_acoes()
-
 # print(acoes)
