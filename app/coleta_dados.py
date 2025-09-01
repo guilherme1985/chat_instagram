@@ -7,7 +7,7 @@ from SalvaDB import insert_mongodb, insert_postgres
 MAX_ERROS = 5
 INTERVALO = 60  # segundos
 
-def main():
+def coleta_dados():
     erro_count = 0
     while erro_count < MAX_ERROS:
         try:
@@ -39,5 +39,3 @@ def main():
     if erro_count >= MAX_ERROS:
         print(f"Falha: atingido o limite de {MAX_ERROS} erros consecutivos. Encerrando execução.")
 
-if __name__ == "__main__":
-    main()
