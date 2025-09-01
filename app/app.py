@@ -1,39 +1,43 @@
-import os
-import dotenv 
+import time
 
-from time import time
 from GetAcoes import get_acoes
 from GetBitcoin import get_bitcoin
 from SalvaDB import insert_mongodb, insert_postgres
 
-# Carrega variáveis de ambiente
-dotenv.load_dotenv()
+MAX_ERROS = 5
+INTERVALO = 60  # segundos
 
-erro_count = 0
-max_erros = 3
-
-while erro_count < max_erros:
-    try:
-        bitcoin = get_bitcoin()
-        acoes = get_acoes()
+def main():
+    erro_count = 0
+    while erro_count < MAX_ERROS:
         try:
-            insert_mongodb(bitcoin)
+            bitcoin = get_bitcoin()
+            acoes = get_acoes()
+            try:
+                insert_mongodb(bitcoin)
+            except Exception as e:
+                print(f"[MongoDB] Erro ao inserir dados: {e}")
+                erro_count += 1
+                continue
+            try:
+                insert_postgres(acoes)
+            except Exception as e:
+                print(f"[PostgreSQL] Erro ao inserir dados: {e}")
+                erro_count += 1
+                continue
+            print("Dados inseridos com sucesso!")
+            erro_count = 0
+        except KeyboardInterrupt:
+            print("Execução interrompida pelo usuário.")
+            break
         except Exception as e:
-            print(f"Erro ao inserir dados no MongoDB: {e}")
+            print(f"Erro inesperado: {e}")
             erro_count += 1
-            continue
-        try:
-            insert_postgres(acoes)
-        except Exception as e:
-            print(f"Erro ao inserir dados no PostgreSQL: {e}")
-            erro_count += 1
-            continue
-        print("Dados inseridos com sucesso!")
-        erro_count = 0
-    except Exception as e:
-        print(f"Erro ao obter ou inserir dados: {e}")
-        erro_count += 1
-    time.sleep(int(os.getenv("SLEEP", 60)))
 
-if erro_count >= max_erros:
-    print(f"Falha: atingido o limite de {max_erros} erros consecutivos. Encerrando execução.")
+        time.sleep(INTERVALO)
+
+    if erro_count >= MAX_ERROS:
+        print(f"Falha: atingido o limite de {MAX_ERROS} erros consecutivos. Encerrando execução.")
+
+if __name__ == "__main__":
+    main()

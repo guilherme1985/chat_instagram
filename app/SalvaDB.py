@@ -11,8 +11,6 @@ dotenv.load_dotenv()
 MONGODB_URL = os.getenv("MONGODB_URL")
 MONGODB_DB = os.getenv("MONGODB_DB")
 MONGODB_COLLECTION = os.getenv("MONGODB_COLLECTION")
-MONGODB_USER = os.getenv("MONGODB_USER")
-MONGODB_PASSWORD = os.getenv("MONGODB_PASSWORD")
 
 ##Conexao Postgres
 POSTGRES_HOST = os.getenv("POSTGRES_HOST")
@@ -51,19 +49,18 @@ def insert_postgres(df):
         cursor.close()
         conn.close()
 
-# Conexao MongoDB
-def insert_mongodb(df):
-    if df.empty:
-        print("DataFrame vazio, nada a inserir.")
+# Conexao MongoDB com autenticaçao
+def insert_mongodb(js):
+    if js.empty:
+        print("Json vazio, nada a inserir.")
         return
-    
     try:
         client = MongoClient(MONGODB_URL)
         db = client[MONGODB_DB]
         collection = db[MONGODB_COLLECTION]
         
         # Converte o DataFrame para dict e insere
-        data = df.to_dict(orient='records')
+        data = js.to_dict(orient='records')
         result = collection.insert_many(data)
         print(f"Inserted IDs: {result.inserted_ids}")
     except Exception as e:
