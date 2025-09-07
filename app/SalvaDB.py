@@ -62,7 +62,7 @@ def insert_mongodb(js):
         # Converte o DataFrame para dict e insere
         data = js.to_dict(orient='records')
         result = collection.insert_many(data)
-        print(f"Inserted IDs: {result.inserted_ids}")
+#        print(f"Inserted IDs: {result.inserted_ids}")
     except Exception as e:
         print(f"Erro: {e}")
     finally:
