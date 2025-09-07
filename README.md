@@ -18,13 +18,13 @@ Description=Chat Instagram Bot
 After=network.target
 
 [Service]
-Type=simple
+Type=oneshot
 User=prod
-WorkingDirectory=/caminho/da/pasta/projeto/chat_instagram/app/
-ExecStart=/caminho/da/pasta/projeto/chat_instagram/.venv/bin/python //caminho/da/pasta/projeto/chat_instagram/app/app.py
-Restart=on-failure
-RestartSec=5s
-Environment=PYTHONPATH=/home/prod/env/prod/chat_instagram/app/
+WorkingDirectory=/home/prod/env/prod/chat_instagram/app
+ExecStart=/home/prod/env/prod/chat_instagram/.venv/bin/python /home/prod/env/prod/chat_instagram/app/app.py
+Restart=no
+Environment=PYTHONPATH=/home/prod/env/prod/chat_instagram/app
+Environment=PYTHONUNBUFFERED=1
 
 [Install]
 WantedBy=multi-user.target
@@ -43,13 +43,12 @@ Environment=PYTHONPATH=/home/prod/env/prod/chat_instagram/app/
 
 ```bash
 [Unit]
-Description=Agendador - Chat Instagram Bot
+Description=Executar Chat Bot a cada minuto (6h-18h seg-sex)
 Requires=chatinstagram.service
 
 [Timer]
-# Executar de segunda a sexta, das 6h às 18h, a cada hora
-OnCalendar=*-*-* 6..18:00:00
-AccuracySec=1min
+OnCalendar=Mon..Fri 6..18:00:00
+AccuracySec=1s
 Persistent=true
 
 [Install]
@@ -65,11 +64,10 @@ sudo systemctl daemon-reload
 sudo systemctl enable chatinstagram.service
 sudo systemctl enable chatinstagram.timer
 
-sudo systemctl restart chatinstagram.service
 sudo systemctl restart chatinstagram.timer
 
 # Ver status do service/timer
-sudo systemctl status chatinstagram.service
+sudo systemctl status chatinstagram.service #  DEVE CONSTAR COMO <Loaded: loaded (/etc/systemd/system/chatinstagram.service; enabled) \ Active: inactive (dead)>
 sudo systemctl status chatinstagram.timer
 
 # Ver logs do service
@@ -77,4 +75,5 @@ sudo journalctl -u chatinstagram.service -f
 
 # Ver logs do timer
 sudo journalctl -u chatinstagram.timer -f
+systemctl list-timers chatinstagram.timer
 ```

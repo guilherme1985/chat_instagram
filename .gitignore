@@ -18,6 +18,9 @@ venv/
 # Poetry
 #poetry.lock
 
+#Backup
+bkp/
+
 # Data files
 data/
 *.csv

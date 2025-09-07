@@ -27,14 +27,15 @@ def alimenta_banco():
                 continue
             print("Dados inseridos com sucesso!")
             erro_count = 0
+            break # Sai do loop após sucesso
         except KeyboardInterrupt:
             print("Execução interrompida pelo usuário.")
             break
         except Exception as e:
             print(f"Erro inesperado: {e}")
             erro_count += 1
-
-        time.sleep(INTERVALO)
+#TESTE LOCAL
+#        time.sleep(INTERVALO)
 
     if erro_count >= MAX_ERROS:
         print(f"Falha: atingido o limite de {MAX_ERROS} erros consecutivos. Encerrando execução.")
